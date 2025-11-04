@@ -1,0 +1,21 @@
+1. What would happen if you used notify() instead of notifyAll()?
+If I only use notify(), it might wake up the wrong thread, like another producer instead of a consumer. 
+That could cause both sides to keep waiting and the program might freeze. notifyAll() wakes up everyone so
+the right one can grab the lock and keep things going.
+
+2. Why must wait() be called inside a while loop instead of an if statement?
+When a thread wakes up from wait(), things might have changed while it was asleep. Using while makes it check
+the condition again before running. If I use if, it only checks once, which can cause errors or wrong behavior 
+if the condition isn’t true anymore.
+
+3. What would happen if the produce() method wasn’t synchronized?
+If it wasn’t synchronized, two or more producer threads could add to the buffer at the same time. That could 
+mess up the list, or go over the buffer limit, or make the program crash because multiple threads would change it at once.
+
+4. What happens if you forget to call notifyAll() in the produce() method?
+The consumer threads wouldn’t wake up when there’s new data to use. They would just sit there waiting forever even 
+though the buffer isn’t empty anymore so my program would basically hang.
+
+5. Why does wait() release the lock? What would happen if it didn’t?
+wait() releases the lock so other threads can work and change the condition i'm waiting for. If it didn’t
+release the lock, no other thread could get in to fix the problem and everything would get stuck forever.
